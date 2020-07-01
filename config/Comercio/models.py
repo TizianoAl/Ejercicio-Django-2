@@ -54,6 +54,18 @@ class Producto(models.Model):
     def __str__(self):
         return str("{} (${})".format(self.nombre,self.precio))
 
+class Venta(models.Model):
+    id = models.AutoField(primary_key=True)
+    fecha = models.DateField()
+    descuento = models.BooleanField()
+    monto_final = models.FloatField()
+    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, null=False)
+    def isDescuento(self):
+        return self.descuento
+    isDescuento.boolean = True
+    isDescuento.short_description = 'Tiene descuento'
+    def __str__(self):
+        return str("Cliente: {}".format(self.cliente.nombre))
 
 class Detalle(models.Model):
     cantidad = models.IntegerField()
@@ -61,16 +73,3 @@ class Detalle(models.Model):
     venta = models.ForeignKey('Venta', on_delete=models.CASCADE, null=False)
     def __str__(self):
         return str("({}) {} a {}".format(self.cantidad,self.producto.nombre,self.venta.cliente.nombre))
-
-class Venta(models.Model):
-    id = models.AutoField(primary_key=True)
-    fecha = models.DateField()
-    descuento = models.IntegerField()
-    monto_final = models.FloatField()
-    cliente = models.ForeignKey('Cliente', on_delete=models.CASCADE, null=False)
-    def isDescuento(self):
-        return self.descuento
-    isDescuento.boolean = descuento
-    isDescuento.short_description = 'Si tiene descuento'
-    def __str__(self):
-        return str("{}: {} (${})".format(self.fecha, self.cliente.nombre,self.montoFinal))
